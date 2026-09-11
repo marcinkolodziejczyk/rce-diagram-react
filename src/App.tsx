@@ -19,11 +19,13 @@ const ZERO_RATIO = 0.25
 const positiveStops = [
   [0, [220, 85, 55]], [0.12, [165, 65, 45]], [0.35, [110, 60, 45]],
   [0.55, [55, 85, 50]], [0.78, [28, 90, 52]], [1, [0, 80, 48]],
+  [1.4, [20, 65, 28]], [2, [0, 0, 10]],
 ] as const
 const negativeStops = [[0, [220, 85, 55]], [0.5, [270, 70, 52]], [1, [300, 75, 32]]] as const
 
 function colorAt(stops: readonly (readonly [number, readonly number[]])[], value: number) {
-  const t = Math.max(0, Math.min(1, value))
+  const maxT = stops[stops.length - 1][0]
+  const t = Math.max(0, Math.min(maxT, value))
   let index = stops.length - 1
   while (index > 0 && stops[index - 1][0] > t) index -= 1
   const [aT, aColor] = stops[Math.max(0, index - 1)]
@@ -103,7 +105,7 @@ function App() {
   const areaPath = points.length ? `${linePath} L${points.at(-1)!.x.toFixed(2)},${zeroY.toFixed(2)} L${points[0].x.toFixed(2)},${zeroY.toFixed(2)} Z` : ''
   const yTicks = Array.from({ length: 5 }, (_, i) => ({ value: scale.yMin + ((scale.yMax - scale.yMin) * i) / 4, y: PAD.top + (H - PAD.top - PAD.bottom) - ((H - PAD.top - PAD.bottom) * i) / 4 }))
   const xTicks = points.filter((point) => point.point.period.slice(3, 5) === '00').filter((_, i) => i % 3 === 0).map((point) => ({ x: point.x, label: point.point.period.slice(0, 5) }))
-  const bars = mode === 'line' ? [] : points.map((point) => { const slot = (W - PAD.left - PAD.right) / points.length; const width = Math.max(slot * 0.88, 1); const value = point.point.rce_pln; return { ...point, barX: point.x - width / 2, barY: Math.min(point.y, zeroY), width, height: Math.max(Math.abs(point.y - zeroY), 1), fill: value >= 0 ? colorAt(positiveStops, value / Math.max(stats?.max ?? 1, 1)) : colorAt(negativeStops, -value / Math.max(-(stats?.min ?? 0), 1)) } })
+  const bars = mode === 'line' ? [] : points.map((point) => { const slot = (W - PAD.left - PAD.right) / points.length; const width = Math.max(slot * 0.88, 1); const value = point.point.rce_pln; return { ...point, barX: point.x - width / 2, barY: Math.min(point.y, zeroY), width, height: Math.max(Math.abs(point.y - zeroY), 1), fill: value >= 0 ? colorAt(positiveStops, value / 1000) : colorAt(negativeStops, -value / 500) } })
 
   const move = (event: React.MouseEvent<SVGSVGElement>) => {
     if (!points.length || !svgRef.current) return
