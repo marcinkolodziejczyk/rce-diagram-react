@@ -17,6 +17,7 @@ h1 { font-size: 22px; margin: 0 0 16px; }
 input[type="date"], button { font: inherit; padding: 8px 12px; border: 1px solid #ccd1dc; border-radius: 6px; background: #fff; color: #1f2430; }
 button { cursor: pointer; } button:hover { background: #eef1f8; }
 button.primary { background: #2f6bff; border-color: #2f6bff; color: #fff; } button.primary:hover { background: #2559da; }
+.unit-check { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; user-select: none; margin-left: 4px; } .unit-check input { cursor: pointer; }
 .spacer { flex: 1; }
 .switch { display: flex; } .switch button { border-radius: 0; } .switch button:first-child { border-radius: 6px 0 0 6px; } .switch button:last-child { border-radius: 0 6px 6px 0; } .switch button + button { border-left: none; } .switch button.active { background: #1f2430; border-color: #1f2430; color: #fff; }
 .stats { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 12px; font-size: 14px; } .stats b { font-size: 16px; }
