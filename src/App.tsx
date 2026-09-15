@@ -60,7 +60,8 @@ function App() {
     const apiDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     setLoading(true); setError(null); setHovered(null)
     try {
-      const response = await fetch(`/api/rce-pln?$filter=business_date%20eq%20%27${apiDate}%27`)
+      // PSE API allows CORS from any origin, so we can call it directly (no proxy needed)
+      const response = await fetch(`https://api.raporty.pse.pl/api/rce-pln?$filter=business_date%20eq%20%27${apiDate}%27`)
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       const result = await response.json() as { value?: RcePoint[] }
       setData([...(result.value ?? [])].sort((a, b) => a.dtime.localeCompare(b.dtime)))

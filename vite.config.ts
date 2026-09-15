@@ -3,14 +3,6 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/rce/',
   plugins: [react()],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://api.raporty.pse.pl',
-        changeOrigin: true,
-        secure: true,
-      },
-    },
-  },
 })
